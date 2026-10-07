@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Forze e l'Equilibrio - Modulo Didattico Interattivo</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --bg-card: #151c2e;
+            --bg-card-hover: #1e293b;
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --accent: #f43f5e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --glow: rgba(56, 189, 248, 0.25);
+            --font-family: Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            font-size: 14pt;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-tag {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        nav button {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        nav button:hover, nav button.active {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.1);
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        .progress-hud {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-card);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .progress-bar-bg {
+            width: 80px;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.4s ease;
+        }
+
+        /* LAYOUT & SECTIONS */
+        main {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HERO / HOME PAGE */
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-subtitle {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .download-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .download-card:hover {
+            background: var(--success);
+            color: #000;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #0b0f19;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px var(--glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--glow);
+        }
+
+        /* THEORY PAGE */
+        .theory-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .theory-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .theory-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .theory-card ul {
+            list-style-position: inside;
+            margin-left: 0.5rem;
+        }
+
+        .formula-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .vector-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .vector-item {
+            background: var(--bg-card-hover);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .vector-item strong {
+            color: var(--secondary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* EXERCISE INDEX */
+        .exercise-index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ex-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .ex-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .ex-card-number {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .ex-card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .ex-status {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .ex-status.completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        /* EXERCISE INTERACTION */
+        .exercise-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .item-block {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .item-question {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .option-btn.selected {
+            border-color: var(--primary);
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .tf-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .tf-btn.selected-true {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .tf-btn.selected-false {
+            background: rgba(244, 63, 94, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* FEEDBACK & NAVIGATION BUTTONS */
+        .ex-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sec {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-sec:hover {
+            border-color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .btn-prim {
+            background: var(--primary);
+            color: #0b0f19;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-prim:hover {
+            box-shadow: 0 0 12px var(--glow);
+            transform: translateY(-1px);
+        }
+
+        .feedback-banner {
+            margin-top: 1rem;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback-banner.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .feedback-banner.partial {
+            display: block;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .solution-box {
+            margin-top: 1rem;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(129, 140, 248, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            background: var(--bg-card);
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .ex-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-group {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            FISICA <span class="logo-tag">INTERATTIVA</span>
+        </div>
+        <nav>
+            <ul>
+                <li><button onclick="navTo('home')" id="nav-home" class="active">Home</button></li>
+                <li><button onclick="navTo('theory')" id="nav-theory">Teoria</button></li>
+                <li><button onclick="navTo('exercises')" id="nav-exercises">Esercizi</button></li>
+            </ul>
+        </nav>
+        <div class="progress-hud">
+            <span>Progresso: <strong id="progress-text">0%</strong></span>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HOME PAGE -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <h1 class="hero-title">Le Forze e l'Equilibrio</h1>
+                <h2 class="hero-subtitle">Cosa fa muovere il mondo?</h2>
+                
+                <a href="Le_Forze_e_l_Equilibrio.pdf" download class="download-card">
+                    📄 Scarica la Risorsa PDF Completa
+                </a>
+
+                <div>
+                    <button class="cta-btn" onclick="navTo('theory')">Inizia il Percorso</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEORY PAGE -->
+        <section id="theory" class="page-section">
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Richiami Teorici</h2>
+            <div class="theory-grid">
+                
+                <div class="theory-card">
+                    <h3>1. Che cos'è una forza?</h3>
+                    <p><strong>DEFINIZIONE:</strong> La forza è la causa capace di modificare lo stato di un corpo o di deformarlo.</p>
+                    <p>Una forza può:</p>
+                    <ul>
+                        <li>Muovere un oggetto fermo.</li>
+                        <li>Fermare un oggetto in movimento.</li>
+                        <li>Deviare la direzione di un oggetto.</li>
+                        <li>Deformare un corpo.</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card">
+                    <h3>2. Le forze nella vita quotidiana</h3>
+                    <ul>
+                        <li><strong>Forza Muscolare ed Elastica</strong> (es. arco, pallavolo, molla)</li>
+                        <li><strong>Forza di Gravità</strong> (attira i corpi verso la Terra)</li>
+                        <li><strong>Forza Magnetica</strong> (es. calamite)</li>
+                        <li><strong>Forza Elettrica</strong> (es. palloncino elettrizzato)</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card">
+                    <h3>3. Le 4 forze fondamentali della natura</h3>
+                    <ul>
+                        <li><strong>Gravitazionale:</strong> Fa cadere i corpi e attira i pianeti.</li>
+                        <li><strong>Elettromagnetica:</strong> Agisce tra particelle elettriche.</li>
+                        <li><strong>Nucleare forte:</strong> Tiene uniti i nuclei degli atomi.</li>
+                        <li><strong>Nucleare debole:</strong> Crea la radioattività.</li>
+                    </ul>
+                </div>
+
+                <div class="theory-card">
+                    <h3>4. Come si misura la forza?</h3>
+                    <p>• <strong>Strumento:</strong> Il Dinamometro (usa una molla).</p>
+                    <p>• <strong>Unità di misura:</strong> Il Newton (N).</p>
+                    <div class="formula-box">
+                        1 kg-peso = 9,8 N (Dipende dalla gravità della Terra)
+                    </div>
+                </div>
+
+                <div class="theory-card">
+                    <h3>5. Le forze sono vettori</h3>
+                    <p>Le forze non sono solo numeri, hanno una direzione! Si disegnano con delle frecce chiamate vettori:</p>
+                    <div class="vector-list">
+                        <div class="vector-item">
+                            <strong>1. Retta d'azione</strong>
+                            La linea su cui agisce.
+                        </div>
+                        <div class="vector-item">
+                            <strong>2. Intensità</strong>
+                            La lunghezza della freccia.
+                        </div>
+                        <div class="vector-item">
+                            <strong>3. Verso</strong>
+                            La punta della freccia.
+                        </div>
+                        <div class="vector-item">
+                            <strong>4. Punto di applicazione</strong>
+                            Dove agisce la forza.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-card">
+                    <h3>6. Somma di forze (Risultante R)</h3>
+                    <p>• <strong>Stesso verso:</strong> R = F1 + F2 (Si sommano. Esempio: 250 N + 150 N = 400 N)</p>
+                    <p>• <strong>Versi opposti:</strong> R = F1 - F2 (Si sottraggono, vince la forza maggiore. Esempio: 250 N - 150 N = 100 N)</p>
+                    <p>• <strong>Direzioni diverse:</strong> Si usa la <strong>Regola del Parallelogramma</strong>. La forza risultante (R) è la diagonale che unisce le due forze.</p>
+                </div>
+
+            </div>
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="cta-btn" onclick="navTo('exercises')">Vai agli Esercizi</button>
+            </div>
+        </section>
+
+        <!-- EXERCISES INDEX -->
+        <section id="exercises" class="page-section">
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary);">Indice Esercizi</h2>
+            <div class="exercise-index-grid">
+                
+                <div class="ex-card" onclick="navTo('ex1')">
+                    <div>
+                        <div class="ex-card-number">Sezione 1</div>
+                        <div class="ex-card-title">Esercizi ABCD (5 Quesiti)</div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Seleziona la risposta corretta tra le quattro opzioni disponibili.</p>
+                    </div>
+                    <div class="ex-status" id="status-ex1">Da completare</div>
+                </div>
+
+                <div class="ex-card" onclick="navTo('ex2')">
+                    <div>
+                        <div class="ex-card-number">Sezione 2</div>
+                        <div class="ex-card-title">Vero o Falso (5 Quesiti)</div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Valuta l'esattezza delle affermazioni teoriche sulle forze.</p>
+                    </div>
+                    <div class="ex-status" id="status-ex2">Da completare</div>
+                </div>
+
+                <div class="ex-card" onclick="navTo('ex3')">
+                    <div>
+                        <div class="ex-card-number">Sezione 3</div>
+                        <div class="ex-card-title">Scelte Multiple (10 Quesiti)</div>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">Verifica avanzata sui concetti di forze, vettori e dinamometro.</p>
+                    </div>
+                    <div class="ex-status" id="status-ex3">Da completare</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- EXERCISE 1: ABCD (5 items) -->
+        <section id="ex1" class="page-section">
+            <div class="exercise-wrapper">
+                <div class="exercise-header">
+                    <h2 class="exercise-title">Esercizio 1: Selezione ABCD (5 quesiti)</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Modulo 1 di 3</span>
+                </div>
+
+                <div id="container-ex1"></div>
+
+                <div class="feedback-banner" id="fb-ex1"></div>
+                <div class="solution-box" id="sol-ex1">Nota docente: Soluzioni verificate in base al testo originale.</div>
+
+                <div class="ex-actions">
+                    <button class="btn-sec" onclick="navTo('exercises')">← Indice</button>
+                    <div class="btn-group">
+                        <button class="btn-sec" onclick="toggleSolution('sol-ex1')">Mostra Soluzioni</button>
+                        <button class="btn-prim" onclick="checkEx1()">Verifica Risposte</button>
+                    </div>
+                    <button class="btn-sec" onclick="navTo('ex2')">Prossimo →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXERCISE 2: VERO/FALSO (5 items) -->
+        <section id="ex2" class="page-section">
+            <div class="exercise-wrapper">
+                <div class="exercise-header">
+                    <h2 class="exercise-title">Esercizio 2: Vero o Falso (5 quesiti)</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Modulo 2 di 3</span>
+                </div>
+
+                <div id="container-ex2"></div>
+
+                <div class="feedback-banner" id="fb-ex2"></div>
+                <div class="solution-box" id="sol-ex2">Nota docente: Soluzioni verificate in base al testo originale.</div>
+
+                <div class="ex-actions">
+                    <button class="btn-sec" onclick="navTo('ex1')">← Precedente</button>
+                    <div class="btn-group">
+                        <button class="btn-sec" onclick="toggleSolution('sol-ex2')">Mostra Soluzioni</button>
+                        <button class="btn-prim" onclick="checkEx2()">Verifica Risposte</button>
+                    </div>
+                    <button class="btn-sec" onclick="navTo('ex3')">Prossimo →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXERCISE 3: MULTIPLE CHOICE (10 items) -->
+        <section id="ex3" class="page-section">
+            <div class="exercise-wrapper">
+                <div class="exercise-header">
+                    <h2 class="exercise-title">Esercizio 3: Scelte Multiple (10 quesiti)</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Modulo 3 di 3</span>
+                </div>
+
+                <div id="container-ex3"></div>
+
+                <div class="feedback-banner" id="fb-ex3"></div>
+                <div class="solution-box" id="sol-ex3">Nota docente: Soluzioni verificate in base al testo originale.</div>
+
+                <div class="ex-actions">
+                    <button class="btn-sec" onclick="navTo('ex2')">← Precedente</button>
+                    <div class="btn-group">
+                        <button class="btn-sec" onclick="toggleSolution('sol-ex3')">Mostra Soluzioni</button>
+                        <button class="btn-prim" onclick="checkEx3()">Verifica Risposte</button>
+                    </div>
+                    <button class="btn-sec" onclick="navTo('closing')">Bilan →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLOSING PAGE -->
+        <section id="closing" class="page-section">
+            <div class="hero">
+                <h1 class="hero-title">Capitolo Completato!</h1>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Hai esplorato e completato il modulo sulle Forze e l'Equilibrio.</p>
+                
+                <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary); margin-bottom: 1rem;" id="final-percentage">0%</div>
+                
+                <button class="cta-btn" onclick="navTo('home')">Torna alla Home</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        site conçu par prof. MARIA GRAZIA BIANCO — 2026
+    </footer>
+
+    <script>
+        // DATA STRUCTURES BASED STRICTLY ON SOURCE MATERIALS
+        const dataEx1 = [
+            {
+                q: "1. Qual è la definizione scientifica di forza?",
+                options: [
+                    "A. Una proprietà posseduta solo dai corpi in movimento",
+                    "B. La causa capace di modificare lo stato di quiete o di moto di un corpo oppure di deformarlo",
+                    "C. La massa complessiva di un oggetto misurata in chilogrammi",
+                    "D. La velocità massima che un corpo può raggiungere"
+                ],
+                correct: 1
+            },
+            {
+                q: "2. Quale tra i seguenti è lo strumento utilizzato per misurare l'intensità di una forza?",
+                options: [
+                    "A. Bilancia a piatti",
+                    "B. Termometro",
+                    "C. Dinamometro",
+                    "D. Cronometro"
+                ],
+                correct: 2
+            },
+            {
+                q: "3. Nel Sistema Internazionale, qual è l'unità di misura della forza?",
+                options: [
+                    "A. Chilogrammo (kg)",
+                    "B. Joule (J)",
+                    "C. Newton (N)",
+                    "D. Watt (W)"
+                ],
+                correct: 2
+            },
+            {
+                q: "4. Quali sono le 4 caratteristiche che definiscono una forza come vettore?",
+                options: [
+                    "A. Massa, volume, peso e densità",
+                    "B. Retta d'azione, intensità, verso e punto di applicazione",
+                    "C. Velocità, accelerazione, tempo e spazio",
+                    "D. Lunghezza, larghezza, altezza e profondità"
+                ],
+                correct: 1
+            },
+            {
+                q: "5. Come si calcola la risultante di due forze con la stessa direzione e verso opposto?",
+                options: [
+                    "A. Si sommano le loro intensità (R = F1 + F2)",
+                    "B. Si calcola la differenza delle loro intensità (R = F1 - F2)",
+                    "C. Si moltiplicano le due forze",
+                    "D. Si applica sempre la regola del parallelogramma"
+                ],
+                correct: 1
+            }
+        ];
+
+        const dataEx2 = [
+            { q: "1. La forza nucleare forte è la responsabile della radioattività di alcuni elementi chimici.", correct: false },
+            { q: "2. Un kg-peso equivale a circa 9,8 Newton sulla Terra.", correct: true },
+            { q: "3. Se due forze agiscono sulla stessa retta e nello stesso verso, i loro effetti si sommano.", correct: true },
+            { q: "4. La retta d'azione di un vettore indica la punta della freccia.", correct: false },
+            { q: "5. Quando le forze hanno direzioni diverse, per calcolare la risultante si usa la Regola del Parallelogramma.", correct: true }
+        ];
+
+        const dataEx3 = [
+            {
+                q: "1. Quale forza tiene uniti i protoni e i neutroni nei nuclei degli atomi?",
+                options: ["Forza gravitazionale", "Forza elettromagnetica", "Forza nucleare forte", "Forza nucleare debole"],
+                correct: 2
+            },
+            {
+                q: "2. La forza di gravità è una forza che:",
+                options: ["Agisce solo per contatto", "Fa cadere i corpi e attira i pianeti", "Respinge i corpi carichi dello stesso segno", "Dipende dalla molla del dinamometro"],
+                correct: 1
+            },
+            {
+                q: "3. Se Ivan applica una forza di 150 N e Andrea applica una forza di 250 N nello stesso verso per spostare un divano, qual è la forza risultante?",
+                options: ["100 N", "400 N", "37500 N", "200 N"],
+                correct: 1
+            },
+            {
+                q: "4. Se Ivan e Andrea tirano una cassa con versi opposti (250 N e 150 N), la forza risultante sarà:",
+                options: ["400 N", "100 N nella direzione della forza maggiore", "0 N", "250 N"],
+                correct: 1
+            },
+            {
+                q: "5. La punta della freccia che rappresenta un vettore indica:",
+                options: ["Il punto di applicazione", "La retta d'azione", "Il verso della forza", "L'intensità della forza"],
+                correct: 2
+            },
+            {
+                q: "6. La lunghezza della freccia vettoriale rappresenta:",
+                options: ["L'intensità della forza", "Il punto di origine", "La retta d'azione", "Il verso"],
+                correct: 0
+            },
+            {
+                q: "7. Il dinamometro basa il suo funzionamento su:",
+                options: ["Un segnale acustico", "La compressione di un liquido", "L'allungamento di una molla", "La rotazione di un ago magnetico"],
+                correct: 2
+            },
+            {
+                q: "8. Quale tra queste NON è una delle quattro forze fondamentali?",
+                options: ["Forza gravitazionale", "Forza muscolare", "Forza elettromagnetica", "Forza nucleare debole"],
+                correct: 1
+            },
+            {
+                q: "9. La forza elettromagnetica agisce tra:",
+                options: ["Solo pianeti e stelle", "Particelle elettricamente cariche", "Solo masse in quiete", "Nuclei atomici per creare radioattività"],
+                correct: 1
+            },
+            {
+                q: "10. In un parallelogramma delle forze, la risultante R è rappresentata da:",
+                options: ["Il lato più corto", "La somma algebrica dei quattro lati", "La diagonale che congiunge il punto di applicazione delle forze", "Il perimetro esterno"],
+                correct: 2
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let completedSections = { ex1: false, ex2: false, ex3: false };
+        let userAnswersEx1 = {};
+        let userAnswersEx2 = {};
+        let userAnswersEx3 = {};
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderEx1();
+            renderEx2();
+            renderEx3();
+            updateProgress();
+        };
+
+        // NAVIGATION
+        function navTo(sectionId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            
+            if (['home', 'theory', 'exercises'].includes(sectionId)) {
+                const navBtn = document.getElementById('nav-' + sectionId);
+                if (navBtn) navBtn.classList.add('active');
+            } else {
+                const navEx = document.getElementById('nav-exercises');
+                if (navEx) navEx.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDER EXERCISES
+        function renderEx1() {
+            const container = document.getElementById('container-ex1');
+            container.innerHTML = dataEx1.map((item, idx) => `
+                <div class="item-block">
+                    <div class="item-question">${item.q}</div>
+                    <div class="options-grid">
+                        ${item.options.map((opt, optIdx) => `
+                            <button class="option-btn" id="ex1_opt_${idx}_${optIdx}" onclick="selectEx1(${idx},${optIdx})">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEx2() {
+            const container = document.getElementById('container-ex2');
+            container.innerHTML = dataEx2.map((item, idx) => `
+                <div class="item-block">
+                    <div class="item-question">${item.q}</div>
+                    <div class="tf-buttons">
+                        <button class="tf-btn" id="ex2_btn_${idx}_true" onclick="selectEx2(${idx}, true)">VERO</button>
+                        <button class="tf-btn" id="ex2_btn_${idx}_false" onclick="selectEx2(${idx}, false)">FALSO</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEx3() {
+            const container = document.getElementById('container-ex3');
+            container.innerHTML = dataEx3.map((item, idx) => `
+                <div class="item-block">
+                    <div class="item-question">${item.q}</div>
+                    <div class="options-grid">
+                        ${item.options.map((opt, optIdx) => `
+                            <button class="option-btn" id="ex3_opt_${idx}_${optIdx}" onclick="selectEx3(${idx},${optIdx})">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // SELECTION HANDLERS
+        function selectEx1(qIdx, optIdx) {
+            userAnswersEx1[qIdx] = optIdx;
+            dataEx1[qIdx].options.forEach((_, i) => {
+                const btn = document.getElementById(`ex1_opt_${qIdx}_${i}`);
+                if (i === optIdx) btn.classList.add('selected');
+                else btn.classList.remove('selected');
+            });
+        }
+
+        function selectEx2(qIdx, val) {
+            userAnswersEx2[qIdx] = val;
+            const btnT = document.getElementById(`ex2_btn_${qIdx}_true`);
+            const btnF = document.getElementById(`ex2_btn_${qIdx}_false`);
+            if (val) {
+                btnT.classList.add('selected-true');
+                btnF.classList.remove('selected-false');
+            } else {
+                btnF.classList.add('selected-false');
+                btnT.classList.remove('selected-true');
+            }
+        }
+
+        function selectEx3(qIdx, optIdx) {
+            userAnswersEx3[qIdx] = optIdx;
+            dataEx3[qIdx].options.forEach((_, i) => {
+                const btn = document.getElementById(`ex3_opt_${qIdx}_${i}`);
+                if (i === optIdx) btn.classList.add('selected');
+                else btn.classList.remove('selected');
+            });
+        }
+
+        // CHECK ANSWERS
+        function checkEx1() {
+            let correctCount = 0;
+            dataEx1.forEach((item, idx) => {
+                if (userAnswersEx1[idx] === item.correct) correctCount++;
+            });
+
+            const fb = document.getElementById('fb-ex1');
+            fb.className = 'feedback-banner ' + (correctCount === dataEx1.length ? 'success' : 'partial');
+            fb.innerHTML = `Risultato: ${correctCount} / ${dataEx1.length} corrette.`;
+
+            if (correctCount === dataEx1.length) {
+                completedSections.ex1 = true;
+                updateStatus('ex1', true);
+            }
+            updateProgress();
+        }
+
+        function checkEx2() {
+            let correctCount = 0;
+            dataEx2.forEach((item, idx) => {
+                if (userAnswersEx2[idx] === item.correct) correctCount++;
+            });
+
+            const fb = document.getElementById('fb-ex2');
+            fb.className = 'feedback-banner ' + (correctCount === dataEx2.length ? 'success' : 'partial');
+            fb.innerHTML = `Risultato: ${correctCount} / ${dataEx2.length} corrette.`;
+
+            if (correctCount === dataEx2.length) {
+                completedSections.ex2 = true;
+                updateStatus('ex2', true);
+            }
+            updateProgress();
+        }
+
+        function checkEx3() {
+            let correctCount = 0;
+            dataEx3.forEach((item, idx) => {
+                if (userAnswersEx3[idx] === item.correct) correctCount++;
+            });
+
+            const fb = document.getElementById('fb-ex3');
+            fb.className = 'feedback-banner ' + (correctCount === dataEx3.length ? 'success' : 'partial');
+            fb.innerHTML = `Risultato: ${correctCount} / ${dataEx3.length} corrette.`;
+
+            if (correctCount === dataEx3.length) {
+                completedSections.ex3 = true;
+                updateStatus('ex3', true);
+            }
+            updateProgress();
+        }
+
+        // HELPERS
+        function toggleSolution(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function updateStatus(exId, isDone) {
+            const el = document.getElementById('status-' + exId);
+            if (isDone) {
+                el.classList.add('completed');
+                el.innerText = 'Completato';
+            }
+        }
+
+        function updateProgress() {
+            const total = 3;
+            let count = 0;
+            if (completedSections.ex1) count++;
+            if (completedSections.ex2) count++;
+            if (completedSections.ex3) count++;
+
+            const pct = Math.round((count / total) * 100);
+            document.getElementById('progress-text').innerText = pct + '%';
+            document.getElementById('progress-fill').style.width = pct + '%';
+            document.getElementById('final-percentage').innerText = pct + '%';
+        }
+    </script>
+</body>
+</html>
